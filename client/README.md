@@ -6,3 +6,11 @@ redirect: chỉ chạy ở Server component. Vẫn có thể chạy trong client
     https://www.youtube.com/watch?v=iBH-ofQ5aI8&list=PLFfVmM19UNqn1ZIWvxn1artfz-C6dgAFb&index=14
 
 https://github.com/duthanhduoc/nextjs-free
+
+-- 21/08/2024
+Cài đặt:
+
+- npx shadcn-ui@latest add form
+- Dùng hook và dùng sự kiện là phải use client.
+
+trong file .env nếu ko có tiền tố NEXT_PUBLIC thì chỉ chạy dc phía server.
