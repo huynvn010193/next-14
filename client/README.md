@@ -14,3 +14,5 @@ Cài đặt:
 - Dùng hook và dùng sự kiện là phải use client.
 
 trong file .env nếu ko có tiền tố NEXT_PUBLIC thì chỉ chạy dc phía server.
+
+- 18: Quản lý authentication:
