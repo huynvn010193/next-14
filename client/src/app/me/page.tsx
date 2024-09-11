@@ -1,5 +1,6 @@
 import envConfig from "@/config";
 import { cookies } from "next/headers";
+import Profile from "./profile";
 
 export default async function MeProfile() {
   const cookiesStore = cookies();
@@ -29,6 +30,7 @@ export default async function MeProfile() {
     <div>
       <h1>Profile</h1>
       <div>Xin chào: {result.payload.data.name}</div>
+      <Profile />
     </div>
   );
 }

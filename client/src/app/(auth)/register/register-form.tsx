@@ -46,8 +46,6 @@ export default function RegisterForm(props: RegisterFormProps) {
         body: JSON.stringify(values),
       }
     ).then((res) => res.json());
-
-    console.log("result", result);
   }
   return (
     <Form {...form}>
