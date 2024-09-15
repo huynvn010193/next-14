@@ -20,10 +20,17 @@ import {
   RegisterBodyType,
 } from "@/schemaValidations/auth.schema";
 import envConfig from "@/config";
+import authApiRequest from "@/apiRequest/auth";
+import { useToast } from "@/components/ui/use-toast";
+import { useRouter } from "next/navigation";
+import { useAppContext } from "@/app/AppProvider";
 
 interface RegisterFormProps {}
 
 export default function RegisterForm(props: RegisterFormProps) {
+  const { toast } = useToast();
+  const { setSessionToken } = useAppContext();
+  const router = useRouter();
   const form = useForm<RegisterBodyType>({
     resolver: zodResolver(RegisterBody),
     defaultValues: {
@@ -36,16 +43,35 @@ export default function RegisterForm(props: RegisterFormProps) {
 
   // 2. Define a submit handler.
   async function onSubmit(values: RegisterBodyType) {
-    const result = await fetch(
-      `${envConfig.NEXT_PUBLIC_API_ENDPOINT}/auth/register`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(values),
+    try {
+    const result = await authApiRequest.register(values);
+    toast({
+      description: result.payload.message,
+    });
+    await authApiRequest.auth({ sessionToken: result.payload.data.token });
+    setSessionToken(result.payload.data.token);
+    router.push("/me");
+  } catch (error: any) {
+    const errors = (error as any).payload.errors as {
+      field: string;
+      message: string;
+    }[];
+    const status = error.status as number;
+    if (status === 422) {
+      for (const error of errors) {
+        form.setError(error.field as keyof LoginBodyType, {
+          type: "server",
+          message: error.message,
+        });
       }
-    ).then((res) => res.json());
+    } else {
+      toast({
+        title: "Lỗi",
+        description: error.payload.message,
+        variant: "destructive",
+      });
+    }
+
   }
   return (
     <Form {...form}>

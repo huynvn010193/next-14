@@ -16,3 +16,10 @@ Cài đặt:
 trong file .env nếu ko có tiền tố NEXT_PUBLIC thì chỉ chạy dc phía server.
 
 - 18: Quản lý authentication:
+
+* Tạo 1 Router handler trong NextJS: app -> api - auth.
+
+- Cookie chỉ lấy dc trong:
+
+1. router handler
+2. trong page.

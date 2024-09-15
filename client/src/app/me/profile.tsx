@@ -2,31 +2,13 @@
 import envConfig from "@/config";
 import React, { use, useEffect } from "react";
 import { useAppContext } from "../AppProvider";
+import accountApiRequest from "@/apiRequest/account";
 
 export default function Profile() {
   const { sessionToken } = useAppContext();
   useEffect(() => {
     const fetchRequest = async () => {
-      const result = await fetch(
-        `${envConfig.NEXT_PUBLIC_API_ENDPOINT}/account/me`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${sessionToken}`,
-          },
-        }
-      ).then(async (res) => {
-        const payload = await res.json();
-        const data = {
-          status: res.status,
-          payload: payload,
-        };
-        if (!res.ok) {
-          throw data;
-        }
-        return data;
-      });
+      const result = await accountApiRequest.me(sessionToken);
       console.log(result);
     };
     fetchRequest();
