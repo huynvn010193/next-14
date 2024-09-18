@@ -1,4 +1,3 @@
-import envConfig from "@/config";
 import { cookies } from "next/headers";
 import Profile from "./profile";
 import accountApiRequest from "@/apiRequest/account";

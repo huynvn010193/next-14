@@ -1,4 +1,5 @@
 import envConfig from "@/config";
+import { LoginResType } from "@/schemaValidations/auth.schema";
 
 type CustomOptions = RequestInit & { baseUrl?: string | undefined };
 
@@ -12,6 +13,22 @@ class HttpError extends Error {
   }
 }
 
+class SessionToken {
+  private token = "";
+  get value() {
+    return this.token;
+  }
+  set value(token: string) {
+    // Nếu gọi method này ở server thì sẽ bị lỗi
+    if (typeof window === "undefined") {
+      throw new Error("Can't set session token on server");
+    }
+    this.token = token;
+  }
+}
+
+export const clientSessionToken = new SessionToken();
+
 const request = async <Response>(
   method: "GET" | "POST" | "PUT" | "DELETE",
   url: string,
@@ -20,6 +37,9 @@ const request = async <Response>(
   const body = options?.body ? JSON.stringify(options.body) : undefined;
   const baseHeader = {
     "Content-Type": "application/json",
+    Authorization: clientSessionToken.value
+      ? `Bearer ${clientSessionToken.value}`
+      : "",
   };
 
   const baseUrl =
@@ -52,6 +72,14 @@ const request = async <Response>(
     console.error("error");
     throw new HttpError(data);
   }
+
+  // set token khi cái url thỏa điều kiện
+  if (["/auth/login", "/auth/register"].includes(url)) {
+    clientSessionToken.value = (payload as LoginResType).data.token;
+  } else if ("/auth/logout".includes(url)) {
+    clientSessionToken.value = "";
+  }
+
   return data;
 };
 

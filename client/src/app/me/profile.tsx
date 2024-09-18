@@ -1,17 +1,16 @@
 "use client";
 import envConfig from "@/config";
 import React, { use, useEffect } from "react";
-import { useAppContext } from "../AppProvider";
 import accountApiRequest from "@/apiRequest/account";
+import { clientSessionToken } from "@/lib/http";
 
 export default function Profile() {
-  const { sessionToken } = useAppContext();
   useEffect(() => {
     const fetchRequest = async () => {
-      const result = await accountApiRequest.me(sessionToken);
+      const result = await accountApiRequest.meClient();
       console.log(result);
     };
     fetchRequest();
-  }, [sessionToken]);
+  }, [clientSessionToken]);
   return <div>Profile</div>;
 }
