@@ -41,6 +41,8 @@ export default function LoginForm(props: LoginFormProps) {
       toast({
         description: result.payload.message,
       });
+
+      // Call đến server của NextJS
       await authApiRequest.auth({ sessionToken: result.payload.data.token });
 
       // Set Token cho client bằng class sessionToken của http.ts
@@ -75,17 +77,17 @@ export default function LoginForm(props: LoginFormProps) {
         onSubmit={form.handleSubmit(onSubmit, (error) => {
           console.log(error);
         })}
-        className='space-y-2 max-w-[600px] flex-shrink-0 w-full'
+        className="space-y-2 max-w-[600px] flex-shrink-0 w-full"
         noValidate
       >
         <FormField
           control={form.control}
-          name='email'
+          name="email"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder='shadcn' type='email' {...field} />
+                <Input placeholder="shadcn" type="email" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -93,18 +95,18 @@ export default function LoginForm(props: LoginFormProps) {
         />
         <FormField
           control={form.control}
-          name='password'
+          name="password"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Mật khẩu</FormLabel>
               <FormControl>
-                <Input placeholder='shadcn' type='password' {...field} />
+                <Input placeholder="shadcn" type="password" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button type='submit' className='!mt-8 w-full'>
+        <Button type="submit" className="!mt-8 w-full">
           Đăng nhập
         </Button>
       </form>

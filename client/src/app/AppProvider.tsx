@@ -24,8 +24,9 @@ export default function AppProvider({
 
   // Dùng useState sẽ render trước đầu tiên.
   useState(() => {
-    if (typeof window !== "undefined") return;
-    clientSessionToken.value = initialSessionToken;
+    if (typeof window !== "undefined") {
+      clientSessionToken.value = initialSessionToken;
+    }
   });
 
   return <>{children}</>;
