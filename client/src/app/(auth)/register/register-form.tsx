@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { useState } from "react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -24,10 +24,12 @@ import authApiRequest from "@/apiRequest/auth";
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import { clientSessionToken } from "@/lib/http";
+import { handleErrorApi } from "@/lib/utils";
 
 interface RegisterFormProps {}
 
 export default function RegisterForm(props: RegisterFormProps) {
+  const [loading, setLoading] = useState(false);
   const { toast } = useToast();
   const router = useRouter();
   const form = useForm<RegisterBodyType>({
@@ -42,6 +44,8 @@ export default function RegisterForm(props: RegisterFormProps) {
 
   // 2. Define a submit handler.
   async function onSubmit(values: RegisterBodyType) {
+    if (loading) return;
+    setLoading(true);
     try {
       const result = await authApiRequest.register(values);
       toast({
@@ -51,25 +55,9 @@ export default function RegisterForm(props: RegisterFormProps) {
       clientSessionToken.value = result.payload.data.token;
       router.push("/me");
     } catch (error: any) {
-      const errors = (error as any).payload.errors as {
-        field: string;
-        message: string;
-      }[];
-      const status = error.status as number;
-      if (status === 422) {
-        for (const error of errors) {
-          form.setError(error.field as "email" | "password", {
-            type: "server",
-            message: error.message,
-          });
-        }
-      } else {
-        toast({
-          title: "Lỗi",
-          description: error.payload.message,
-          variant: "destructive",
-        });
-      }
+      handleErrorApi({ error, setError: form.setError });
+    } finally {
+      setLoading(false);
     }
   }
   return (

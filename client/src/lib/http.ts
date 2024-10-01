@@ -3,11 +3,42 @@ import { LoginResType } from "@/schemaValidations/auth.schema";
 
 type CustomOptions = RequestInit & { baseUrl?: string | undefined };
 
-class HttpError extends Error {
+const ENTITY_ERROR_STATUS = 422;
+
+// TODO: kiểu dữ liệu giống như format API trã về.
+type EntityErrorPayload = {
+  message: string;
+  errors: {
+    field: string;
+    message: string;
+  }[];
+};
+
+export class HttpError extends Error {
   status: number;
-  payload: any;
+  // TODO: payload lúc nào cũng có message và 1 kiểu dữ liệu chưa biết.
+  payload: {
+    message: string;
+    [key: string]: any;
+  };
   constructor({ status, payload }: { status: number; payload: any }) {
     super("Http Error");
+    this.status = status;
+    this.payload = payload;
+  }
+}
+
+export class EntityError extends HttpError {
+  status: 422;
+  payload: EntityErrorPayload;
+  constructor({
+    status,
+    payload,
+  }: {
+    status: 422;
+    payload: EntityErrorPayload;
+  }) {
+    super({ status, payload });
     this.status = status;
     this.payload = payload;
   }
@@ -69,8 +100,13 @@ const request = async <Response>(
   };
 
   if (!res.ok) {
-    console.error("error");
-    throw new HttpError(data);
+    if (res.status === ENTITY_ERROR_STATUS) {
+      throw new EntityError(
+        data as { status: 422; payload: EntityErrorPayload }
+      );
+    } else {
+      throw new HttpError(data);
+    }
   }
 
   // set token khi cái url thỏa điều kiện

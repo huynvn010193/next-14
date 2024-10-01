@@ -1,6 +1,5 @@
 "use client";
-
-import * as React from "react";
+import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
@@ -19,10 +18,12 @@ import { useToast } from "@/components/ui/use-toast";
 import authApiRequest from "@/apiRequest/auth";
 import { useRouter } from "next/navigation";
 import { clientSessionToken } from "@/lib/http";
+import { handleErrorApi } from "@/lib/utils";
 
 interface LoginFormProps {}
 
 export default function LoginForm(props: LoginFormProps) {
+  const [loading, setLoading] = useState(false);
   const { toast } = useToast();
   // const { setSessionToken } = useAppContext();
   const router = useRouter();
@@ -36,6 +37,8 @@ export default function LoginForm(props: LoginFormProps) {
 
   // 2. Define a submit handler.
   async function onSubmit(values: LoginBodyType) {
+    if (loading) return;
+    setLoading(true);
     try {
       const result = await authApiRequest.login(values);
       toast({
@@ -50,25 +53,9 @@ export default function LoginForm(props: LoginFormProps) {
 
       router.push("/me");
     } catch (error: any) {
-      const errors = (error as any).payload.errors as {
-        field: string;
-        message: string;
-      }[];
-      const status = error.status as number;
-      if (status === 422) {
-        for (const error of errors) {
-          form.setError(error.field as keyof LoginBodyType, {
-            type: "server",
-            message: error.message,
-          });
-        }
-      } else {
-        toast({
-          title: "Lỗi",
-          description: error.payload.message,
-          variant: "destructive",
-        });
-      }
+      handleErrorApi({ error, setError: form.setError });
+    } finally {
+      setLoading(false);
     }
   }
   return (
@@ -77,17 +64,17 @@ export default function LoginForm(props: LoginFormProps) {
         onSubmit={form.handleSubmit(onSubmit, (error) => {
           console.log(error);
         })}
-        className="space-y-2 max-w-[600px] flex-shrink-0 w-full"
+        className='space-y-2 max-w-[600px] flex-shrink-0 w-full'
         noValidate
       >
         <FormField
           control={form.control}
-          name="email"
+          name='email'
           render={({ field }) => (
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder="shadcn" type="email" {...field} />
+                <Input placeholder='shadcn' type='email' {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -95,18 +82,18 @@ export default function LoginForm(props: LoginFormProps) {
         />
         <FormField
           control={form.control}
-          name="password"
+          name='password'
           render={({ field }) => (
             <FormItem>
               <FormLabel>Mật khẩu</FormLabel>
               <FormControl>
-                <Input placeholder="shadcn" type="password" {...field} />
+                <Input placeholder='shadcn' type='password' {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button type="submit" className="!mt-8 w-full">
+        <Button type='submit' className='!mt-8 w-full'>
           Đăng nhập
         </Button>
       </form>
