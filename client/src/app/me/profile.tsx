@@ -2,15 +2,19 @@
 import envConfig from "@/config";
 import React, { use, useEffect } from "react";
 import accountApiRequest from "@/apiRequest/account";
-import { clientSessionToken } from "@/lib/http";
+import { handleErrorApi } from "@/lib/utils";
 
 export default function Profile() {
   useEffect(() => {
     const fetchRequest = async () => {
-      const result = await accountApiRequest.meClient();
-      console.log(result);
+      try {
+        const result = await accountApiRequest.meClient();
+        console.log("🚀 ~ fetchRequest ~ result:", result);
+      } catch (error) {
+        handleErrorApi({ error });
+      }
     };
     fetchRequest();
-  }, [clientSessionToken]);
+  }, []);
   return <div>Profile</div>;
 }
