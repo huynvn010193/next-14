@@ -1,5 +1,6 @@
 import envConfig from "@/config";
 import { LoginResType } from "@/schemaValidations/auth.schema";
+import { normalizePath } from "./utils";
 
 type CustomOptions = RequestInit & { baseUrl?: string | undefined };
 
@@ -109,11 +110,18 @@ const request = async <Response>(
     }
   }
 
-  // set token khi cái url thỏa điều kiện
-  if (["/auth/login", "/auth/register"].includes(url)) {
-    clientSessionToken.value = (payload as LoginResType).data.token;
-  } else if ("/auth/logout".includes(url)) {
-    clientSessionToken.value = "";
+  // TODO: Đảm bảo logic dưới đây chỉ chạy ở client (browser)
+  if (typeof window !== "undefined") {
+    // set token khi cái url thỏa điều kiện
+    if (
+      ["auth/login", "auth/register"].some(
+        (item) => item === normalizePath(url)
+      )
+    ) {
+      clientSessionToken.value = (payload as LoginResType).data.token;
+    } else if ("/auth/logout" === normalizePath(url)) {
+      clientSessionToken.value = "";
+    }
   }
 
   return data;

@@ -1,6 +1,7 @@
 import * as React from "react";
 import { ModeToggle } from "./mode-toggle";
 import Link from "next/link";
+import ButtonLogout from "./button-logout";
 
 export interface HeaderProps {}
 
@@ -13,6 +14,9 @@ export default function Header(props: HeaderProps) {
         </li>
         <li>
           <Link href='/register'>Đăng ký</Link>
+        </li>
+        <li>
+          <ButtonLogout />
         </li>
       </ul>
       <ModeToggle />
