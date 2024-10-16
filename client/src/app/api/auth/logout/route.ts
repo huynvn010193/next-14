@@ -42,14 +42,6 @@ export async function POST(request: Request) {
       );
     }
   }
-
-  // res lúc này chỉ có sesionToken thui. gửi về res là sessionToken.
-  return Response.json(res, {
-    status: 200,
-    headers: {
-      "Set-Cookie": `sessionToken=${sessionToken}; Path=/; HttpOnly`,
-    },
-  });
 }
 
 // HttpOnly : đễ Javascript client không truy cập vào cookie này.
