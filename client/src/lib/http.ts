@@ -1,10 +1,16 @@
 import envConfig from "@/config";
 import { LoginResType } from "@/schemaValidations/auth.schema";
 import { normalizePath } from "./utils";
+import { redirect } from "next/navigation";
 
 type CustomOptions = RequestInit & { baseUrl?: string | undefined };
 
 const ENTITY_ERROR_STATUS = 422;
+const AUTHENTICATION_ERROR_STATUS = 401;
+
+// TODO: viết hàm Promise delay
+export const promiseDelay = (ms: number) =>
+  new Promise((resolve) => setTimeout(resolve, ms));
 
 // TODO: kiểu dữ liệu giống như format API trã về.
 type EntityErrorPayload = {
@@ -61,6 +67,9 @@ class SessionToken {
 
 export const clientSessionToken = new SessionToken();
 
+// TODO: biến này check để call logout 1 lần.
+let clientLogoutRequest: null | Promise<any> = null;
+
 const request = async <Response>(
   method: "GET" | "POST" | "PUT" | "DELETE",
   url: string,
@@ -105,6 +114,32 @@ const request = async <Response>(
       throw new EntityError(
         data as { status: 422; payload: EntityErrorPayload }
       );
+    } else if (res.status === AUTHENTICATION_ERROR_STATUS) {
+      // TODO: chỉ chạy trên browser, trường hợp logout ở client.
+      if (typeof window !== "undefined") {
+        if (!clientLogoutRequest) {
+          clientLogoutRequest = fetch("/api/auth/logout", {
+            method: "POST",
+            body: JSON.stringify({ force: true }),
+            headers: {
+              ...baseHeader,
+            },
+          });
+          await clientLogoutRequest;
+          clientSessionToken.value = "";
+
+          // TODO: khi gọi API logout thì set lại bằng null
+          clientLogoutRequest = null;
+          location.href = "/login";
+        }
+      } else {
+        // TODO: trường hợp logout ở server.
+        // Khi gọi server component gọi lên server thì sẽ truyền sessionToken trong Authorization header. (xem accountApiRequest.me)
+        const sessionToken = (options?.headers as any)?.Authorization.split(
+          "Bearer "
+        )[1];
+        redirect(`logout?sessionToken=${sessionToken}`);
+      }
     } else {
       throw new HttpError(data);
     }
