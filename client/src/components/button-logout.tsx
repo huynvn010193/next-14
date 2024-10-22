@@ -14,6 +14,8 @@ export default function ButtonLogout() {
       router.push("/login");
     } catch (error) {
       handleErrorApi({ error });
+
+      // TODO: Nếu lỗi thì logout luôn
       authApiRequest.logoutFromNextClientToNextServer(true).then((res) => {
         router.push(`/login?redirectFrom=${pathname}`);
       });

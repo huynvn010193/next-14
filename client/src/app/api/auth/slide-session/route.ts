@@ -5,7 +5,6 @@ import { cookies } from "next/headers";
 export async function POST(request: Request) {
   const cookieStore = cookies();
   const sessionToken = cookieStore.get("sessionToken");
-  console.log("🚀 ~ POST ~ sessionToken:", sessionToken);
 
   if (!sessionToken) {
     return Response.json(

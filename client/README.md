@@ -23,3 +23,6 @@ trong file .env nếu ko có tiền tố NEXT_PUBLIC thì chỉ chạy dc phía 
 
 1. router handler
 2. trong page.
+
+- 22/10: cài package: date fns
+-> Càng hạn chết client component thì website load càng nhanh.
