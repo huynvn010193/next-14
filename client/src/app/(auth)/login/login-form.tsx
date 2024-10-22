@@ -41,12 +41,16 @@ export default function LoginForm(props: LoginFormProps) {
     setLoading(true);
     try {
       const result = await authApiRequest.login(values);
+
+      // TODO: Call đến server của NextJS
+      await authApiRequest.auth({
+        sessionToken: result.payload.data.token,
+        expiresAt: result.payload.data.expiresAt,
+      });
+
       toast({
         description: result.payload.message,
       });
-
-      // Call đến server của NextJS
-      await authApiRequest.auth({ sessionToken: result.payload.data.token });
 
       // Set Token cho client bằng class sessionToken của http.ts
       clientSessionToken.value = result.payload.data.token;

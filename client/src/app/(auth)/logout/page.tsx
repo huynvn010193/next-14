@@ -11,18 +11,17 @@ export default function Logout() {
   const sessionToken = searchParams.get("sessionToken");
 
   useEffect(() => {
-    const controller = new AbortController();
-    const signal = controller.signal;
+    // TODO: ngăn chặn API call 2 lần ta dùng controller và sinal.
+    // const controller = new AbortController();
+    // const signal = controller.signal;
     if (sessionToken === clientSessionToken.value) {
-      authApiRequest
-        .logoutFromNextClientToNextServer(true, signal)
-        .then((res) => {
-          router.push(`/login?redirectFrom=${pathname}`);
-        });
+      authApiRequest.logoutFromNextClientToNextServer(true).then((res) => {
+        router.push(`/login?redirectFrom=${pathname}`);
+      });
     }
-    return () => {
-      controller.abort();
-    };
+    // return () => {
+    //   controller.abort();
+    // };
   }, [sessionToken, router, pathname]);
 
   return <div>Logout</div>;

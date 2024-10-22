@@ -13,8 +13,8 @@ const authApiRequest = {
   register: (body: RegisterBodyType) =>
     http.post<RegisterResType>("auth/register", body),
 
-  // auth gọi lên server NextJS
-  auth: (body: { sessionToken: string }) =>
+  // TODO: auth gọi lên server NextJS
+  auth: (body: { sessionToken: string; expiresAt: string }) =>
     http.post("/api/auth", body, { baseUrl: "" }),
 
   logoutFromNextServerToServer: (sessionToken: string) =>
@@ -35,8 +35,8 @@ const authApiRequest = {
       { baseUrl: "", signal }
     ),
 
-  // TODO: slide Session
-  sildeSessionFromNextServerToServer: (sessionToken: string) =>
+  // TODO: slide Session Server
+  slideSessionFromNextServerToServer: (sessionToken: string) =>
     http.post<SlideSessionResType>(
       "/auth/slide-session",
       {},
@@ -44,6 +44,16 @@ const authApiRequest = {
         headers: {
           Authorization: `Bearer ${sessionToken}`,
         },
+      }
+    ),
+
+  // TODO: slide Session NextServer
+  slideSessionFromNextClientToNextServer: () =>
+    http.post<SlideSessionResType>(
+      "/api/auth/slide-session",
+      {},
+      {
+        baseUrl: "",
       }
     ),
 };

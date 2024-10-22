@@ -94,6 +94,8 @@ const request = async <Response>(
       : "",
   };
 
+  // TODO: nếu api call lên NextServer thì phải truyền baseUrl: "",
+  // Còn call lên server thì không cần truyền.
   const baseUrl =
     options?.baseUrl === undefined
       ? envConfig.NEXT_PUBLIC_API_ENDPOINT
