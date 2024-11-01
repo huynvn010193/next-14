@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
@@ -24,12 +24,14 @@ import {
 import productApiRequest from "@/apiRequest/product";
 import { Textarea } from "@/components/ui/textarea";
 import Image from "next/image";
+import { set } from "date-fns";
 
 interface ProductAddProps {}
 
 export default function ProductAddForm(props: ProductAddProps) {
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
+  const inputRef = useRef<HTMLInputElement | null>(null);
   // const { setSessionToken } = useAppContext();
   const router = useRouter();
   const form = useForm<CreateProductBodyType>({
@@ -127,6 +129,7 @@ export default function ProductAddForm(props: ProductAddProps) {
                 <Input
                   type='file'
                   accept='image/*'
+                  ref={inputRef}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     const file = e.target.files?.[0];
                     if (file) {
@@ -149,7 +152,18 @@ export default function ProductAddForm(props: ProductAddProps) {
               alt={file.name}
               className='w-32 h-32 object-cover'
             />
-            <Button variant={"destructive"} size={"sm"}>
+            <Button
+              variant={"destructive"}
+              size={"sm"}
+              type='button'
+              onClick={() => {
+                setFile(null);
+                form.setValue("image", "");
+                if (inputRef.current) {
+                  inputRef.current.value = "";
+                }
+              }}
+            >
               Xóa hình ảnh
             </Button>
           </div>

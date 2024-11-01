@@ -86,13 +86,27 @@ const request = async <Response>(
   url: string,
   options: CustomOptions | undefined
 ) => {
-  const body = options?.body ? JSON.stringify(options.body) : undefined;
-  const baseHeader = {
-    "Content-Type": "application/json",
-    Authorization: clientSessionToken.value
-      ? `Bearer ${clientSessionToken.value}`
-      : "",
-  };
+  // TODO: nếu body là FormData thì không cần JSON.stringify
+  const body = options?.body
+    ? options.body instanceof FormData
+      ? options.body
+      : JSON.stringify(options.body)
+    : undefined;
+
+  // TODO: nếu body là FormData thì không cần "Content-Type"
+  const baseHeader =
+    body instanceof FormData
+      ? {
+          Authorization: clientSessionToken.value
+            ? `Bearer ${clientSessionToken.value}`
+            : "",
+        }
+      : {
+          "Content-Type": "application/json",
+          Authorization: clientSessionToken.value
+            ? `Bearer ${clientSessionToken.value}`
+            : "",
+        };
 
   // TODO: nếu api call lên NextServer thì phải truyền baseUrl: "",
   // Còn call lên server thì không cần truyền.
@@ -105,12 +119,13 @@ const request = async <Response>(
     ? `${baseUrl}${url}`
     : `${baseUrl}/${url}`;
 
+  // TODO: nếu mà ko truyền header vào options thì lấy header mặc định
   const res = await fetch(fullUrl, {
     ...options,
     headers: {
       ...baseHeader,
       ...options?.headers,
-    },
+    } as any, // TODO: ép kiểu về any để chấp nhật "Content-Type" ko cần truyền
     body,
     method,
   });
@@ -136,7 +151,7 @@ const request = async <Response>(
             body: JSON.stringify({ force: true }),
             headers: {
               ...baseHeader,
-            },
+            } as any,
           });
           await clientLogoutRequest;
           clientSessionToken.value = "";
