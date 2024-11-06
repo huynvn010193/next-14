@@ -22,7 +22,7 @@ export default function AppProvider({
   //   sessionToken.value = initialSessionToken;
   // }, [initialSessionToken]);
 
-  // Dùng useState sẽ render trước đầu tiên.
+  // FIXME Dùng useState sẽ render trước đầu tiên.
   useState(() => {
     if (typeof window !== "undefined") {
       clientSessionToken.value = initialSessionToken;

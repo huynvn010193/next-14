@@ -1,4 +1,4 @@
-import ProductAddForm from "./product-add-form";
+import ProductAddForm from "@/app/products/_components/product-add-form";
 
 export interface ProducePageProps {}
 

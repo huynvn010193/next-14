@@ -25,4 +25,6 @@ trong file .env nếu ko có tiền tố NEXT_PUBLIC thì chỉ chạy dc phía 
 2. trong page.
 
 - 22/10: cài package: date fns
--> Càng hạn chết client component thì website load càng nhanh.
+  -> Càng hạn chết client component thì website load càng nhanh.
+
+Đặt thêm dấu `"_"` trước folder nextJS không check folder chứa route

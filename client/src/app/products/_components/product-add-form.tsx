@@ -20,15 +20,21 @@ import { handleErrorApi } from "@/lib/utils";
 import {
   CreateProductBody,
   CreateProductBodyType,
+  ProductResType,
+  UpdateProductBodyType,
 } from "@/schemaValidations/product.schema";
 import productApiRequest from "@/apiRequest/product";
 import { Textarea } from "@/components/ui/textarea";
 import Image from "next/image";
 import { set } from "date-fns";
 
-interface ProductAddProps {}
+type Product = ProductResType["data"];
 
-export default function ProductAddForm(props: ProductAddProps) {
+type ProductAddProps = {
+  product?: Product;
+};
+
+export default function ProductAddForm({ product }: ProductAddProps) {
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -37,18 +43,19 @@ export default function ProductAddForm(props: ProductAddProps) {
   const form = useForm<CreateProductBodyType>({
     resolver: zodResolver(CreateProductBody),
     defaultValues: {
-      name: "",
-      price: 0,
-      description: "",
-      image: "",
+      name: product?.name ?? "",
+      price: product?.price ?? 0,
+      description: product?.description ?? "",
+      image: product?.image ?? "",
     },
   });
 
   const [file, setFile] = useState<File | null>(null);
 
-  // 2. Define a submit handler.
-  async function onSubmit(values: CreateProductBodyType) {
-    if (loading) return;
+  // FIXME: image lấy từ form defaultValues
+  const image = form.watch("image");
+
+  const createProduct = async (values: CreateProductBodyType) => {
     setLoading(true);
     try {
       const formData = new FormData();
@@ -67,6 +74,44 @@ export default function ProductAddForm(props: ProductAddProps) {
       handleErrorApi({ error, setError: form.setError });
     } finally {
       setLoading(false);
+    }
+  };
+
+  const updateProduct = async (_values: UpdateProductBodyType) => {
+    if (!product) return;
+    setLoading(true);
+    let values = _values;
+    try {
+      if (file) {
+        const formData = new FormData();
+        formData.append("file", file as Blob);
+        const uploadImageResult = await productApiRequest.uploadImage(formData);
+        const imageUrl = uploadImageResult.payload.data;
+        values = {
+          ...values,
+          image: imageUrl,
+        };
+      }
+
+      const result = await productApiRequest.update(product.id, values);
+      toast({
+        description: result.payload.message,
+      });
+      // router.push("/products");
+    } catch (error: any) {
+      handleErrorApi({ error, setError: form.setError });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // 2. Define a submit handler.
+  async function onSubmit(values: CreateProductBodyType) {
+    if (loading) return;
+    if (product) {
+      updateProduct(values);
+    } else {
+      createProduct(values);
     }
   }
 
@@ -143,13 +188,13 @@ export default function ProductAddForm(props: ProductAddProps) {
             </FormItem>
           )}
         />
-        {file && (
+        {(file || image) && (
           <div>
             <Image
-              src={URL.createObjectURL(file)} // TODO: cú pháp chuyển từ file ảnh sang src
+              src={file ? URL.createObjectURL(file) : image} // TODO: cú pháp chuyển từ file ảnh sang src, sử dụng dấu ! cuối cùng để bảo ko thể undefined
               width={128}
               height={128}
-              alt={file.name}
+              alt='preview'
               className='w-32 h-32 object-cover'
             />
             <Button
@@ -169,7 +214,7 @@ export default function ProductAddForm(props: ProductAddProps) {
           </div>
         )}
         <Button type='submit' className='!mt-8 w-full'>
-          Thêm sản phẩm
+          {product ? "Cập nhật sản phẩm" : "Thêm mới sản phẩm"}
         </Button>
       </form>
     </Form>
