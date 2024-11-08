@@ -2,14 +2,14 @@
 import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import ButtonRedirect from "./components/ButtonRedirect";
+// import ButtonRedirect from "./components/ButtonRedirect";
 
 const isAuth = false;
 
 export default function Home() {
-  if (!isAuth) {
-    redirect("/login");
-  }
+  // if (!isAuth) {
+  //   redirect("/login");
+  // }
 
   return (
     <main>
@@ -21,7 +21,7 @@ export default function Home() {
           <Link href={"/register"}>Register</Link>
         </li>
       </ul>
-      <ButtonRedirect />
+      {/* <ButtonRedirect /> */}
     </main>
   );
 }
