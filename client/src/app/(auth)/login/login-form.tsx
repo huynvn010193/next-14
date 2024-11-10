@@ -56,6 +56,7 @@ export default function LoginForm(props: LoginFormProps) {
       clientSessionToken.value = result.payload.data.token;
 
       router.push("/me");
+      router.refresh();
     } catch (error: any) {
       handleErrorApi({ error, setError: form.setError });
     } finally {
