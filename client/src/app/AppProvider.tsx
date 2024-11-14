@@ -1,6 +1,7 @@
 "use client";
 import { clientSessionToken } from "@/lib/http";
-import { createContext, useLayoutEffect, useState } from "react";
+import { AccountResType } from "@/schemaValidations/account.schema";
+import { createContext, useContext, useLayoutEffect, useState } from "react";
 
 // export const useAppContext = () => {
 //   const context = useContext(AppContext);
@@ -10,17 +11,31 @@ import { createContext, useLayoutEffect, useState } from "react";
 //   return context;
 // };
 
+type User = AccountResType["data"];
+
+const AppContext = createContext<{
+  user: User | null;
+  setUser: (user: User | null) => void;
+}>({
+  user: null,
+  setUser: () => {},
+});
+
+export const useAppContext = () => {
+  const context = useContext(AppContext);
+  return context;
+};
+
 export default function AppProvider({
   children,
   initialSessionToken = "",
+  user: userProp,
 }: {
   children: React.ReactNode;
   initialSessionToken?: string;
+  user: User | null;
 }) {
-  // const [sessionToken, setSessionToken] = useState(initialSessionToken);
-  // useLayoutEffect(() => {
-  //   sessionToken.value = initialSessionToken;
-  // }, [initialSessionToken]);
+  const [user, setUser] = useState<User | null>(userProp);
 
   // FIXME Dùng useState sẽ render trước đầu tiên.
   useState(() => {
@@ -29,5 +44,14 @@ export default function AppProvider({
     }
   });
 
-  return <>{children}</>;
+  return (
+    <AppContext.Provider
+      value={{
+        user,
+        setUser,
+      }}
+    >
+      {children}
+    </AppContext.Provider>
+  );
 }

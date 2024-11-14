@@ -4,8 +4,11 @@ import React from "react";
 import { Button } from "./ui/button";
 import authApiRequest from "@/apiRequest/auth";
 import { handleErrorApi } from "@/lib/utils";
+import { useAppContext } from "@/app/AppProvider";
 
 export default function ButtonLogout() {
+  const { user } = useAppContext();
+  console.log("user", user);
   const router = useRouter();
   const pathname = usePathname();
   const handleLogout = async () => {
