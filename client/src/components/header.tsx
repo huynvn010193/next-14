@@ -12,7 +12,7 @@ export type HeaderProps = {
 
 export default async function Header({ user }: HeaderProps) {
   return (
-    <div>
+    <div className='flex space-x-4'>
       <ul className='flex space-x-4'>
         <li>
           <Link href='/products'>Sản phẩm</Link>
