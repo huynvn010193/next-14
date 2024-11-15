@@ -29,3 +29,5 @@ trong file .env nếu ko có tiền tố NEXT_PUBLIC thì chỉ chạy dc phía 
 
 Đặt thêm dấu `"_"` trước folder nextJS không check folder chứa route
 Trong nextJS muốn call lại API dùng router.refresh(); -> router lấy từ useRouter của next/navigation
+
+generateMetadata: chỉ dùng được ở Server Component thôi.

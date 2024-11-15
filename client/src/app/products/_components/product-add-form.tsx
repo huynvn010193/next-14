@@ -99,6 +99,7 @@ export default function ProductAddForm({ product }: ProductAddProps) {
         description: result.payload.message,
       });
       // router.push("/products");
+      router.refresh();
     } catch (error: any) {
       handleErrorApi({ error, setError: form.setError });
     } finally {
