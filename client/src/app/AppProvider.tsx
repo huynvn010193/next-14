@@ -1,7 +1,7 @@
 "use client";
 import { isClient } from "@/lib/http";
 import { AccountResType } from "@/schemaValidations/account.schema";
-import { createContext, useContext, useState } from "react";
+import { createContext, useCallback, useContext, useState } from "react";
 
 type User = AccountResType["data"];
 
@@ -34,10 +34,13 @@ export default function AppProvider({
     return null;
   });
   const isAuthenticated = Boolean(user);
-  const setUser = (user: User | null) => {
-    setUserState(user);
-    localStorage.setItem("user", JSON.stringify(user));
-  };
+  const setUser = useCallback(
+    (user: User | null) => {
+      setUserState(user);
+      localStorage.setItem("user", JSON.stringify(user));
+    },
+    [setUserState]
+  );
   return (
     <AppContext.Provider
       value={{
