@@ -31,3 +31,12 @@ trong file .env nếu ko có tiền tố NEXT_PUBLIC thì chỉ chạy dc phía 
 Trong nextJS muốn call lại API dùng router.refresh(); -> router lấy từ useRouter của next/navigation
 
 generateMetadata: chỉ dùng được ở Server Component thôi.
+
+Static Rendering: Tạo ra HTML ngây tại thời điểm chạy câu lệnh "npm run build". Tốt hơn với content ít thay đổi.
+Dynamic rendering: Tạo ra HTML ngay tại thời điểm có request đến server. (hàng ngày request thì tạo ra hàng html).
+Mặc định NextJS -> Static Rendering khi có thể.
+
+- Khi ta dùng dynamic function trong component tree (children, parent component, hoặc layout...): cookies, headers, search params (?a=1&b=2). -> thì chuyển page thành
+  dynamic rendering.
+
+-
