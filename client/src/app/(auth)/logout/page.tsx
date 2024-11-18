@@ -1,10 +1,9 @@
 "use client";
 import authApiRequest from "@/apiRequest/auth";
-import { clientSessionToken } from "@/lib/http";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
-import React, { useEffect } from "react";
+import React, { Suspense, useEffect } from "react";
 
-export default function Logout() {
+function LogoutLogic() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -14,7 +13,7 @@ export default function Logout() {
     // TODO: ngăn chặn API call 2 lần ta dùng controller và sinal.
     // const controller = new AbortController();
     // const signal = controller.signal;
-    if (sessionToken === clientSessionToken.value) {
+    if (sessionToken === localStorage.getItem("sessionToken")) {
       authApiRequest.logoutFromNextClientToNextServer(true).then((res) => {
         router.push(`/login?redirectFrom=${pathname}`);
       });
@@ -25,4 +24,12 @@ export default function Logout() {
   }, [sessionToken, router, pathname]);
 
   return <div>Logout</div>;
+}
+
+export default function LogoutPage() {
+  return (
+    <Suspense>
+      <LogoutLogic />
+    </Suspense>
+  );
 }

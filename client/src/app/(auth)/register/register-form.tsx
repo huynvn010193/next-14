@@ -23,7 +23,6 @@ import envConfig from "@/config";
 import authApiRequest from "@/apiRequest/auth";
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
-import { clientSessionToken } from "@/lib/http";
 import { handleErrorApi } from "@/lib/utils";
 
 interface RegisterFormProps {}
@@ -58,7 +57,7 @@ export default function RegisterForm(props: RegisterFormProps) {
         description: result.payload.message,
       });
 
-      clientSessionToken.value = result.payload.data.token;
+      // clientSessionToken.value = result.payload.data.token;
       router.push("/me");
     } catch (error: any) {
       handleErrorApi({ error, setError: form.setError });

@@ -17,7 +17,6 @@ import { LoginBody, LoginBodyType } from "@/schemaValidations/auth.schema";
 import { useToast } from "@/components/ui/use-toast";
 import authApiRequest from "@/apiRequest/auth";
 import { useRouter } from "next/navigation";
-import { clientSessionToken } from "@/lib/http";
 import { handleErrorApi } from "@/lib/utils";
 
 interface LoginFormProps {}
@@ -53,7 +52,7 @@ export default function LoginForm(props: LoginFormProps) {
       });
 
       // Set Token cho client bằng class sessionToken của http.ts
-      clientSessionToken.value = result.payload.data.token;
+      // clientSessionToken.value = result.payload.data.token;
 
       router.push("/me");
       router.refresh();

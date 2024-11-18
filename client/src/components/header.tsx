@@ -11,6 +11,7 @@ export type HeaderProps = {
 };
 
 export default async function Header({ user }: HeaderProps) {
+  console.log("user", user);
   return (
     <div className='flex space-x-4'>
       <ul className='flex space-x-4'>

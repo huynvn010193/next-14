@@ -1,5 +1,4 @@
 "use client";
-import { clientSessionToken } from "@/lib/http";
 import { AccountResType } from "@/schemaValidations/account.schema";
 import { createContext, useContext, useLayoutEffect, useState } from "react";
 
@@ -28,7 +27,6 @@ export const useAppContext = () => {
 
 export default function AppProvider({
   children,
-  initialSessionToken = "",
   user: userProp,
 }: {
   children: React.ReactNode;
@@ -36,13 +34,6 @@ export default function AppProvider({
   user: User | null;
 }) {
   const [user, setUser] = useState<User | null>(userProp);
-
-  // FIXME Dùng useState sẽ render trước đầu tiên.
-  useState(() => {
-    if (typeof window !== "undefined") {
-      clientSessionToken.value = initialSessionToken;
-    }
-  });
 
   return (
     <AppContext.Provider
