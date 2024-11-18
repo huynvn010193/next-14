@@ -7,7 +7,7 @@ import { handleErrorApi } from "@/lib/utils";
 import { useAppContext } from "@/app/AppProvider";
 
 export default function ButtonLogout() {
-  const { user } = useAppContext();
+  const { setUser } = useAppContext();
   const router = useRouter();
   const pathname = usePathname();
   const handleLogout = async () => {
@@ -22,6 +22,7 @@ export default function ButtonLogout() {
         router.push(`/login?redirectFrom=${pathname}`);
       });
     } finally {
+      setUser(null);
       router.refresh();
       localStorage.removeItem("sessionToken");
       localStorage.removeItem("sessionTokenExpiresAt");

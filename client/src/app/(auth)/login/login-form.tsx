@@ -18,13 +18,14 @@ import { useToast } from "@/components/ui/use-toast";
 import authApiRequest from "@/apiRequest/auth";
 import { useRouter } from "next/navigation";
 import { handleErrorApi } from "@/lib/utils";
+import { useAppContext } from "@/app/AppProvider";
 
 interface LoginFormProps {}
 
 export default function LoginForm(props: LoginFormProps) {
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
-  // const { setSessionToken } = useAppContext();
+  const { setUser } = useAppContext();
   const router = useRouter();
   const form = useForm<LoginBodyType>({
     resolver: zodResolver(LoginBody),
@@ -51,8 +52,8 @@ export default function LoginForm(props: LoginFormProps) {
         description: result.payload.message,
       });
 
-      // Set Token cho client bằng class sessionToken của http.ts
-      // clientSessionToken.value = result.payload.data.token;
+      // TODO: set User sau khi login
+      setUser(result.payload.data.account);
 
       router.push("/me");
       router.refresh();

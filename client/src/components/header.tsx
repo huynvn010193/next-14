@@ -1,16 +1,12 @@
+"use client";
 import * as React from "react";
 import { ModeToggle } from "./mode-toggle";
 import Link from "next/link";
 import ButtonLogout from "./button-logout";
-import { cookies } from "next/headers";
-import { AccountResType } from "@/schemaValidations/account.schema";
+import { useAppContext } from "@/app/AppProvider";
 
-type User = AccountResType["data"];
-export type HeaderProps = {
-  user: User | null;
-};
-
-export default async function Header({ user }: HeaderProps) {
+export default function Header() {
+  const { user } = useAppContext();
   console.log("user", user);
   return (
     <div className='flex space-x-4'>

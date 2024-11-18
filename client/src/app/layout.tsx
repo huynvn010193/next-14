@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
-import Header from "@/components/header";
 // import Header from "./components/header";
 import { Toaster } from "@/components/ui/toaster";
 import AppProvider from "./AppProvider";
@@ -11,8 +10,11 @@ import SlideSession from "@/components/slide-session";
 import accountApiRequest from "@/apiRequest/account";
 import { AccountResType } from "@/schemaValidations/account.schema";
 import { baseOpenGraph } from "./shared-metadata";
+import dynamic from "next/dynamic";
 
 const inter = Inter({ subsets: ["vietnamese"] });
+
+const Header = dynamic(() => import("@/components/header"), { ssr: false });
 
 // const myFont = localFont({
 //   src: [
@@ -43,9 +45,6 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // TODO: call API get info me
-  let user: AccountResType["data"] | null = null;
-
   return (
     <html lang='en' suppressHydrationWarning>
       <body className={`${inter.className}`}>
@@ -56,8 +55,8 @@ export default async function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <AppProvider user={user}>
-            <Header user={user} />
+          <AppProvider>
+            <Header />
             {children}
             <SlideSession />
           </AppProvider>

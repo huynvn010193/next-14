@@ -1,23 +1,18 @@
 "use client";
+import { isClient } from "@/lib/http";
 import { AccountResType } from "@/schemaValidations/account.schema";
-import { createContext, useContext, useLayoutEffect, useState } from "react";
-
-// export const useAppContext = () => {
-//   const context = useContext(AppContext);
-//   if (!context) {
-//     throw new Error("useAppContext must be used within a AppProvider");
-//   }
-//   return context;
-// };
+import { createContext, useContext, useState } from "react";
 
 type User = AccountResType["data"];
 
 const AppContext = createContext<{
   user: User | null;
   setUser: (user: User | null) => void;
+  isAuthenticated: boolean;
 }>({
   user: null,
   setUser: () => {},
+  isAuthenticated: false,
 });
 
 export const useAppContext = () => {
@@ -27,19 +22,28 @@ export const useAppContext = () => {
 
 export default function AppProvider({
   children,
-  user: userProp,
 }: {
   children: React.ReactNode;
   initialSessionToken?: string;
-  user: User | null;
 }) {
-  const [user, setUser] = useState<User | null>(userProp);
-
+  const [user, setUserState] = useState<User | null>(() => {
+    if (isClient()) {
+      const _user = localStorage.getItem("user");
+      return _user ? JSON.parse(_user) : null;
+    }
+    return null;
+  });
+  const isAuthenticated = Boolean(user);
+  const setUser = (user: User | null) => {
+    setUserState(user);
+    localStorage.setItem("user", JSON.stringify(user));
+  };
   return (
     <AppContext.Provider
       value={{
         user,
         setUser,
+        isAuthenticated,
       }}
     >
       {children}

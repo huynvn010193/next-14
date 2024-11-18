@@ -24,6 +24,7 @@ import authApiRequest from "@/apiRequest/auth";
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import { handleErrorApi } from "@/lib/utils";
+import { useAppContext } from "@/app/AppProvider";
 
 interface RegisterFormProps {}
 
@@ -40,6 +41,7 @@ export default function RegisterForm(props: RegisterFormProps) {
       confirmPassword: "",
     },
   });
+  const { setUser } = useAppContext();
 
   // 2. Define a submit handler.
   async function onSubmit(values: RegisterBodyType) {
@@ -58,6 +60,7 @@ export default function RegisterForm(props: RegisterFormProps) {
       });
 
       // clientSessionToken.value = result.payload.data.token;
+      setUser(result.payload.data.account);
       router.push("/me");
     } catch (error: any) {
       handleErrorApi({ error, setError: form.setError });

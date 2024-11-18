@@ -80,9 +80,9 @@ const request = async <Response>(
         };
 
   if (isClient()) {
-    const sesstionToken = localStorage.getItem("sesstionToken");
-    if (sesstionToken) {
-      baseHeader.Authorization = `Bearer ${sesstionToken}`;
+    const sessionToken = localStorage.getItem("sessionToken");
+    if (sessionToken) {
+      baseHeader.Authorization = `Bearer ${sessionToken}`;
     }
   }
 
@@ -136,7 +136,7 @@ const request = async <Response>(
             await clientLogoutRequest;
           } catch (error) {
           } finally {
-            localStorage.removeItem("sesstionToken");
+            localStorage.removeItem("sessionToken");
             localStorage.removeItem("sessionTokenExpiresAt");
             // TODO: khi gọi API logout thì set lại bằng null
             clientLogoutRequest = null;
@@ -165,10 +165,10 @@ const request = async <Response>(
       )
     ) {
       const { token, expiresAt } = (payload as LoginResType).data;
-      localStorage.setItem("sesstionToken", token);
+      localStorage.setItem("sessionToken", token);
       localStorage.setItem("sessionTokenExpiresAt", expiresAt);
     } else if ("/auth/logout" === normalizePath(url)) {
-      localStorage.removeItem("sesstionToken");
+      localStorage.removeItem("sessionToken");
       localStorage.removeItem("sessionTokenExpiresAt");
     }
   }
