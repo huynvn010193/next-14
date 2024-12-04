@@ -13,3 +13,4 @@ git commit --amend --no edit
 5 .env
 
 - Tạo file config.ts -> validate giá trị từ .env, và dùng biến từ file này. validate sẽ dùng zod.
+  admin@order.com - 123456
