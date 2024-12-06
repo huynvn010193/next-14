@@ -14,3 +14,9 @@ git commit --amend --no edit
 
 - Tạo file config.ts -> validate giá trị từ .env, và dùng biến từ file này. validate sẽ dùng zod.
   admin@order.com - 123456
+
+Có 2 loại page: static rendering và dynamic rendering.
+
+- Dynamic rendering: không build ra html sẵn.-> Mỗi 1 lần request thì mới tạo ra html -> tăng work lost lên server.
+- Khi ta dùng dynamic function trong component tree (children, parent component, hoặc layout...): cookies, headers, search params (?a=1&b=2). -> thì chuyển page thành
+  dynamic rendering.
