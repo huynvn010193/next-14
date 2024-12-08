@@ -20,3 +20,5 @@ Có 2 loại page: static rendering và dynamic rendering.
 - Dynamic rendering: không build ra html sẵn.-> Mỗi 1 lần request thì mới tạo ra html -> tăng work lost lên server.
 - Khi ta dùng dynamic function trong component tree (children, parent component, hoặc layout...): cookies, headers, search params (?a=1&b=2). -> thì chuyển page thành
   dynamic rendering.
+
+- Do set là http readonly -> nếu muốn xóa thì phải thông qua next server.
