@@ -34,6 +34,8 @@ export default function NavItems({ className }: { className?: string }) {
     setIsAuth(Boolean(getAccessTokenFromLocalStorage()));
   }, []);
 
+  console.log("isAuth", isAuth);
+
   return menuItems.map((item) => {
     if (
       (item.authRequired === false && isAuth) ||

@@ -181,8 +181,8 @@ const request = async <Response>(
       localStorage.setItem("accessToken", accessToken);
       localStorage.setItem("refreshToken", refreshToken);
     } else if ("api/auth/logout" === normalizedUrl) {
-      localStorage.removeItem("sessionToken");
-      localStorage.removeItem("sessionTokenExpiresAt");
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
     }
   }
 
