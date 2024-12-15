@@ -22,3 +22,7 @@ Có 2 loại page: static rendering và dynamic rendering.
   dynamic rendering.
 
 - Do set là http readonly -> nếu muốn xóa thì phải thông qua next server.
+- Có 2 cách khi useQuery xử lý thành công
+
+1. sử dụng useEffect fetch data
+2. custom fucntion trong hook sử dụng useQuery (useAccountProfile).
