@@ -25,4 +25,4 @@ Có 2 loại page: static rendering và dynamic rendering.
 - Có 2 cách khi useQuery xử lý thành công
 
 1. sử dụng useEffect fetch data
-2. custom fucntion trong hook sử dụng useQuery (useAccountProfile).
+2. custom fucntion trong hook sử dụng useQuery (useAccountMe).
