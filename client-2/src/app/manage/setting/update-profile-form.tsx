@@ -92,6 +92,7 @@ export default function UpdateProfileForm() {
         className='grid auto-rows-max items-start gap-4 md:gap-8'
         onReset={reset}
         onSubmit={form.handleSubmit(onSubmit, (e) => {
+          // TODO: khi submit không được sẽ nhảy vào đây.
           console.log(e);
         })}
       >
