@@ -119,15 +119,21 @@ const request = async <Response>(
     method,
   });
 
-  const payload: Response = await res.json();
-
+  const payload: Response | { message: string } = (await res.json()) as
+    | { message: string }
+    | EntityErrorPayload;
   const data = {
     status: res.status,
-    payload,
+    payload: payload as Response,
   };
 
   if (!res.ok) {
     if (res.status === ENTITY_ERROR_STATUS) {
+      if ("message" in payload) {
+        throw {
+          message: payload.message,
+        };
+      }
       throw new EntityError(
         data as { status: 422; payload: EntityErrorPayload }
       );

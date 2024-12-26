@@ -25,12 +25,21 @@ export const handleErrorApi = ({
 }) => {
   // TODO: IF error có type EntityError (tức có dạng status 422 và payload EntityErrorPayload) và setError tồn tại.
   if (error instanceof EntityError && setError) {
-    error.payload.errors.forEach((item) => {
-      setError(item.field, {
-        type: "server",
-        message: item.message,
+    if (error.payload.errors) {
+      error.payload.errors.forEach((item) => {
+        setError(item.field, {
+          type: "server",
+          message: item.message,
+        });
       });
-    });
+    } else {
+      toast({
+        title: "Lỗi",
+        description: error.payload.message,
+        variant: "destructive",
+        duration: duration ?? 5000,
+      });
+    }
   } else {
     toast({
       title: "Lỗi",
@@ -51,3 +60,9 @@ export const getAccessTokenFromLocalStorage = () => {
 export const getRefreshTokenFromLocalStorage = () => {
   return isBrowser ? localStorage.getItem("refreshToken") : null;
 };
+
+export const setAccessTokenToLocalStorage = (value: string) =>
+  isBrowser && localStorage.setItem("accessToken", value);
+
+export const setRefreshTokenToLocalStorage = (value: string) =>
+  isBrowser && localStorage.setItem("refreshToken", value);
