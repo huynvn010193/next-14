@@ -26,3 +26,5 @@ Có 2 loại page: static rendering và dynamic rendering.
 
 1. sử dụng useEffect fetch data
 2. custom fucntion trong hook sử dụng useQuery (useAccountMe).
+
+Important: Bài 35.
