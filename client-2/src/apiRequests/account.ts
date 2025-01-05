@@ -10,6 +10,13 @@ import {
 
 const accountApiRequest = {
   me: () => http.get<AccountResType>("/accounts/me"),
+  // TODO: tạo sMe để test trường hợp logout khi API die.
+  sMe: (accessToken: string) =>
+    http.get<AccountResType>("/accounts/me", {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }),
   updateMe: (body: UpdateMeBodyType) =>
     http.put<AccountResType>("/accounts/me", body),
   changePassword: (body: ChangePasswordBodyType) =>

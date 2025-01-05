@@ -28,3 +28,6 @@ Có 2 loại page: static rendering và dynamic rendering.
 2. custom fucntion trong hook sử dụng useQuery (useAccountMe).
 
 Important: Bài 35.
+Bài 36: Ở Server component khi ta gọi API trong try...catch mà trong API đó có redirect thì sẽ throw ra 1 lỗi và dừng redirect.
+
+- Cách 1: ko dùng try catch khi call API.

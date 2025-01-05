@@ -166,11 +166,16 @@ const request = async <Response>(
         }
       } else {
         // TODO: trường hợp logout ở server.
-        // Khi gọi server component gọi lên server thì sẽ truyền accessToekn trong Authorization header. (xem accountApiRequest.me)
-        const accessToekn = (options?.headers as any)?.Authorization.split(
+        // Khi gọi server component gọi lên server thì sẽ truyền accessToken trong Authorization header. (xem accountApiRequest.me).
+
+        // TODO: Đây là trường hợp khi mà chúng ta vẫn còn accessToken còn hạn
+        // Và chúng ta gọi API ở Next.js Server (Route Handler, Server Component) đến Server Backend.
+
+        console.log("Lỗi ở server");
+        const accessToken = (options?.headers as any)?.Authorization.split(
           "Bearer "
         )[1];
-        redirect(`logout?accessToekn=${accessToekn}`);
+        redirect(`logout?accessToekn=${accessToken}`);
       }
     } else {
       throw new HttpError(data);
@@ -178,6 +183,8 @@ const request = async <Response>(
   }
 
   // TODO: Đảm bảo logic dưới đây chỉ chạy ở client (browser) - trường hợp Login và Logout.
+  // Khi call đến login page bên Next -> Tự động set accessToken và refreshToken vào localStorage.
+  // Khi call đến logout page bên Next -> Tự động xóa accessToken và refreshToken trong localStorage.
   if (isClient) {
     const normalizedUrl = normalizePath(url);
 

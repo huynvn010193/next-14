@@ -26,7 +26,7 @@ export async function POST(request: Request) {
       secure: true,
       expires: decodeRefreshToken.exp * 1000,
     });
-    return Response.json(payload);
+    return Response.json(payload); // TODO: viết vầy để bên http.ts get ra payload (await res.json()) được
   } catch (error) {
     if (error instanceof HttpError) {
       return Response.json(error.payload, {
