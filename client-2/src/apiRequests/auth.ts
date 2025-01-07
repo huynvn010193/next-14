@@ -5,6 +5,8 @@ import {
   LoginBodyType,
   LoginResType,
   LogoutBodyType,
+  RefreshTokenBodyType,
+  RefreshTokenResType,
 } from "@/schemaValidations/auth.schema";
 
 const authApiRequest = {
@@ -28,6 +30,12 @@ const authApiRequest = {
     ),
   // TODO: do ở MT client thì đã tự động truyền accessToken và refreshToken vào Authorization header nên không cần truyền thêm.
   logout: () => http.post("/api/auth/logout", null, { baseUrl: "" }),
+  sRefreshToken: (body: RefreshTokenBodyType) =>
+    http.post<RefreshTokenResType>("/auth/refresh-token", body),
+  refreshToken: () =>
+    http.post<RefreshTokenResType>("/api/auth/refresh-token", null, {
+      baseUrl: "",
+    }),
 };
 
 export default authApiRequest;

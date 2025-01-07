@@ -6,8 +6,6 @@ export default async function Dashboard() {
   const cookieStore = await cookies();
   const accessToken = cookieStore.get("accessToken")?.value as string;
 
-  console.log("accessToken", accessToken);
-
   let name = "";
   try {
     const result = await accountApiRequest.sMe(accessToken);
