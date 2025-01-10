@@ -10,6 +10,10 @@ import {
 } from "@/schemaValidations/auth.schema";
 
 const authApiRequest = {
+  refreshTokenRequest: null as Promise<{
+    status: number;
+    payload: RefreshTokenResType;
+  }> | null,
   sLogin: (body: LoginBodyType) => http.post<LoginResType>("/auth/login", body),
   login: (body: LoginBodyType) =>
     http.post<LoginResType>("/api/auth/login", body, {
@@ -32,10 +36,24 @@ const authApiRequest = {
   logout: () => http.post("/api/auth/logout", null, { baseUrl: "" }),
   sRefreshToken: (body: RefreshTokenBodyType) =>
     http.post<RefreshTokenResType>("/auth/refresh-token", body),
-  refreshToken: () =>
-    http.post<RefreshTokenResType>("/api/auth/refresh-token", null, {
-      baseUrl: "",
-    }),
+  // refreshToken: () =>
+  //   http.post<RefreshTokenResType>("/api/auth/refresh-token", null, {
+  //     baseUrl: "",
+  //   }),
+  async refreshToken() {
+    // TODO: dòng này để check việc gọi lại duplicate refreshTokenRequest khi chuyển trang. Vì khi bị duplicate sẽ get accessToken và refreshToken cũ.
+    if (this.refreshTokenRequest) {
+      return this.refreshTokenRequest;
+    }
+    this.refreshTokenRequest = http.post<RefreshTokenResType>(
+      "/api/auth/refresh-token",
+      null,
+      { baseUrl: "" }
+    );
+    const result = await this.refreshTokenRequest;
+    this.refreshTokenRequest = null; // Gọi xong request thì set lại bằng null.
+    return result;
+  },
 };
 
 export default authApiRequest;

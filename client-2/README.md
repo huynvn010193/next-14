@@ -31,3 +31,8 @@ Important: Bài 35.
 Bài 36: Ở Server component khi ta gọi API trong try...catch mà trong API đó có redirect thì sẽ throw ra 1 lỗi và dừng redirect.
 
 - Cách 1: ko dùng try catch khi call API.
+
+* Các trường hợp hết hạn access token:
+
+1. Đang dùng thì hết hạn: chúng ta sẽ không để trường hợp này xảy ra -> bằng cách set 1 setinterval check token liên tục để refresh token trước khi nó hết hạn.
+2. Lâu ngày không vào web -> vào lại thì hết hạn.
