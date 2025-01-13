@@ -23,17 +23,18 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/", request.url));
   }
 
-  // TODO:  TH: đăng nhập rùi nhưng hết hạn và truy cập vào page authentication -> accessToken hết hạn nhưng refreshToken còn hạn.
+  // TODO: TH: đăng nhập rùi nhưng hết hạn và truy cập vào page authentication -> accessToken hết hạn nhưng refreshToken còn hạn.
   if (
     privatePaths.some((path) => pathname.startsWith(path)) &&
     !accessToken &&
     refreshToken
   ) {
-    const url = new URL("/logout", request.url);
+    const url = new URL("/refresh-token", request.url);
     url.searchParams.set(
       "refreshToken",
       request.cookies.get("refreshToken")?.value ?? ""
     );
+    url.searchParams.set("redirect", pathname);
     return NextResponse.redirect(url);
   }
 
