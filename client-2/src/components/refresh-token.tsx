@@ -1,7 +1,7 @@
 "use client";
 
 import { checkAndRefreshToken } from "@/lib/utils";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 // TODO: những page sẽ không check refreshToken.
@@ -9,6 +9,7 @@ const UNAUTHENTICATED_PATH = ["/login", "/logout", "/refresh-token"];
 
 export default function RefreshToken() {
   const pathname = usePathname();
+  const router = useRouter();
   useEffect(() => {
     if (UNAUTHENTICATED_PATH.includes(pathname)) return;
     let interval: any = null;
@@ -18,16 +19,26 @@ export default function RefreshToken() {
     checkAndRefreshToken({
       onError: () => {
         clearInterval(interval);
+        router.push("/login");
       },
     });
 
     // TODO: timeout interval phải bé hơn thời gian hết hạn của access token.
     // Ví dụ time hết hạn của interval là 10s thì 1s mình sẽ cho check lại 1 lần.
     const TIMEOUT = 1000;
-    interval = setInterval(checkAndRefreshToken, TIMEOUT);
+    interval = setInterval(
+      () =>
+        checkAndRefreshToken({
+          onError: () => {
+            clearInterval(interval);
+            router.push("/login");
+          },
+        }),
+      TIMEOUT
+    );
     return () => {
       clearInterval(interval);
     };
-  }, [pathname]);
+  }, [pathname, router]);
   return null;
 }
