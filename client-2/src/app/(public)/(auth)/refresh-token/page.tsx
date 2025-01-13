@@ -11,7 +11,6 @@ export default function RefreshTokenPage() {
   const searchParams = useSearchParams();
   const refeshTokenFromUrl = searchParams.get("refreshToken");
   const redirectPathname = searchParams.get("redirect");
-  console.log("redirectPathname", redirectPathname);
 
   useEffect(() => {
     if (

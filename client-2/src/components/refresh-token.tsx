@@ -14,7 +14,7 @@ export default function RefreshToken() {
     if (UNAUTHENTICATED_PATH.includes(pathname)) return;
     let interval: any = null;
 
-    // TODO: phải gọi lần đầu tiên vì interval sẽ chạy sau thời gian TIMEOUT. (Nghĩa là useEffetch chạy thì chạy checkAndRefreshToken rùi 5s sau
+    // TODO: phải gọi lần đầu tiên vì interval sẽ chạy sau thời gian TIMEOUT. (Nghĩa là useEffetch chạy thì chạy checkAndRefreshToken rùi 1s sau
     // hàm checkAndRefreshToken trong interval mới chạy).
     checkAndRefreshToken({
       onError: () => {

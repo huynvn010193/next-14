@@ -36,3 +36,5 @@ Bài 36: Ở Server component khi ta gọi API trong try...catch mà trong API �
 
 1. Đang dùng thì hết hạn: chúng ta sẽ không để trường hợp này xảy ra -> bằng cách set 1 setinterval check token liên tục để refresh token trước khi nó hết hạn.
 2. Lâu ngày không vào web -> vào lại thì hết hạn.
+
+caching router của NextJS tồn tại 30s.
