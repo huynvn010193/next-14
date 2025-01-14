@@ -21,14 +21,16 @@ export default function LogoutPage() {
     // Nếu có access token mà access token khác với access token trong local storage thì cũng không được.
     if (
       (refeshTokenFromUrl &&
-        refeshTokenFromUrl !== getRefreshTokenFromLocalStorage()) ||
+        refeshTokenFromUrl === getRefreshTokenFromLocalStorage()) ||
       (accessTokenFromUrl &&
-        accessTokenFromUrl !== getAccessTokenFromLocalStorage())
-    )
-      return;
-    mutateAsync().then(() => {
-      router.push("/login");
-    });
+        accessTokenFromUrl === getAccessTokenFromLocalStorage())
+    ) {
+      mutateAsync().then(() => {
+        router.push("/login");
+      });
+    } else {
+      router.push("/");
+    }
   }, [mutateAsync, router, refeshTokenFromUrl, accessTokenFromUrl]);
 
   return <div>LogoutPage</div>;

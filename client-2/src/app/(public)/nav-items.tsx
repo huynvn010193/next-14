@@ -1,5 +1,6 @@
 "use client";
 
+import { useAppContext } from "@/components/app-provider";
 import { getAccessTokenFromLocalStorage } from "@/lib/utils";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -27,14 +28,7 @@ const menuItems = [
 ];
 
 export default function NavItems({ className }: { className?: string }) {
-  const [isAuth, setIsAuth] = useState(false);
-
-  // TODO: Dùng useEffect để kiểm tra đồng bộ giữa client và server.
-  useEffect(() => {
-    setIsAuth(Boolean(getAccessTokenFromLocalStorage()));
-  }, []);
-
-  console.log("isAuth", isAuth);
+  const { isAuth } = useAppContext();
 
   return menuItems.map((item) => {
     if (

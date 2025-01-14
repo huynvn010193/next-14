@@ -12,11 +12,10 @@ export function middleware(request: NextRequest) {
   const accessToken = Boolean(request.cookies.get("accessToken")?.value);
   const refreshToken = Boolean(request.cookies.get("refreshToken")?.value);
 
-  console.log("refreshToken", refreshToken);
-
   // TODO: chưa đăng nhập thì không cho vào private paths. Trường hợp chưa đăng nhập thì sẽ không có refreshToken. Do accessToken hết hạn sẽ biến mất.
   if (privatePaths.some((path) => pathname.startsWith(path)) && !refreshToken) {
     const url = new URL("/login", request.url);
+    url.searchParams.set("clearTokens", "true");
     return NextResponse.redirect(url);
   }
 

@@ -25,6 +25,8 @@ export default function RefreshTokenPage() {
         },
         // TODO: trường hợp thất bại -> server gửi về 401 -> tự động logout
       });
+    } else {
+      router.push("/");
     }
   }, [router, refeshTokenFromUrl, redirectPathname]);
 

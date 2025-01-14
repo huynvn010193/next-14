@@ -38,3 +38,10 @@ Bài 36: Ở Server component khi ta gọi API trong try...catch mà trong API �
 2. Lâu ngày không vào web -> vào lại thì hết hạn.
 
 caching router của NextJS tồn tại 30s.
+
+clip 43: đoạn http://localhost:3000/manage/dashboard -> nên copy paste vì nếu gõ tay: code sẽ chạy vào Layout -> Comp Refresh-token => lúc này sẽ xóa lun localstorage
+
+http://localhost:3000/manage/dashboard
+
+- Trong trang login có 2 phần có useEffect: 1 trong login và 2 là trong NavItem: Do phần bên login chạy trước nên localStorage đã bị xóa. -> Khắc phục: tạo 1 context API
+  bên app-provider.tsx
