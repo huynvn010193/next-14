@@ -1,11 +1,5 @@
 "use client";
-import React, {
-  createContext,
-  use,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
@@ -26,6 +20,7 @@ const query = new QueryClient({
 
 const AppContext = createContext({
   isAuth: false,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   setIsAuth: (isAuth: boolean) => {},
 });
 

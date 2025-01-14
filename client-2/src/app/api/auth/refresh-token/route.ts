@@ -3,6 +3,7 @@ import authApiRequest from "@/apiRequests/auth";
 import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export async function POST(request: Request) {
   const cookieStore = await cookies();
   const refreshToken = cookieStore.get("refreshToken")?.value;

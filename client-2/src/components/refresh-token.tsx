@@ -12,6 +12,7 @@ export default function RefreshToken() {
   const router = useRouter();
   useEffect(() => {
     if (UNAUTHENTICATED_PATH.includes(pathname)) return;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let interval: any = null;
 
     // TODO: phải gọi lần đầu tiên vì interval sẽ chạy sau thời gian TIMEOUT. (Nghĩa là useEffetch chạy thì chạy checkAndRefreshToken rùi 1s sau
