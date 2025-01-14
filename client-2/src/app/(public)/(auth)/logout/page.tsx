@@ -1,4 +1,5 @@
 "use client";
+import { useAppContext } from "@/components/app-provider";
 import {
   getAccessTokenFromLocalStorage,
   getRefreshTokenFromLocalStorage,
@@ -13,6 +14,7 @@ export default function LogoutPage() {
   const searchParams = useSearchParams();
   const refeshTokenFromUrl = searchParams.get("refreshToken");
   const accessTokenFromUrl = searchParams.get("accessToken");
+  const { setIsAuth } = useAppContext();
 
   useEffect(() => {
     console.log("useEffect");
@@ -28,10 +30,11 @@ export default function LogoutPage() {
       mutateAsync().then(() => {
         router.push("/login");
       });
+      setIsAuth(false);
     } else {
       router.push("/");
     }
-  }, [mutateAsync, router, refeshTokenFromUrl, accessTokenFromUrl]);
+  }, [mutateAsync, router, refeshTokenFromUrl, accessTokenFromUrl, setIsAuth]);
 
   return <div>LogoutPage</div>;
 }
