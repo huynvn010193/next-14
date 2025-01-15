@@ -23,7 +23,7 @@ export default function UpdateProfileForm() {
     resolver: zodResolver(UpdateMeBody),
     defaultValues: {
       name: "",
-      avatar: "",
+      avatar: undefined, // TODO: do avatar trong kiểu UpdateMeBody có string hoặc optional () nên phải để undefined.
     },
   });
 
@@ -40,7 +40,7 @@ export default function UpdateProfileForm() {
   useEffect(() => {
     if (data) {
       const { name, avatar } = data.payload.data;
-      form.reset({ name, avatar: avatar ?? "" });
+      form.reset({ name, avatar: avatar ?? undefined });
     }
   }, [data, form]);
 
