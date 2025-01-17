@@ -45,3 +45,5 @@ http://localhost:3000/manage/dashboard
 
 - Trong trang login có 2 phần có useEffect: 1 trong login và 2 là trong NavItem: Do phần bên login chạy trước nên localStorage đã bị xóa. -> Khắc phục: tạo 1 context API
   bên app-provider.tsx
+
+- React query useMutation nếu 2 tham số thì mutationFn truyền dạng hàm, còn 1 tham số trở xuống thì ko cần. (xem useAccount.tsx)
